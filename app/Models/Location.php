@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Location extends Model
 {
@@ -19,6 +20,7 @@ class Location extends Model
         'email',
         'description',
         'is_active',
+        'region_id',
     ];
 
     protected $casts = [
@@ -39,6 +41,14 @@ class Location extends Model
     public function departments(): HasMany
     {
         return $this->hasMany(Department::class);
+    }
+
+    /**
+     * Get the region that this location belongs to.
+     */
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(Region::class);
     }
 
     /**

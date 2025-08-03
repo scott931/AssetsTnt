@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -37,6 +38,11 @@ class Region extends Model
         return $this->hasMany(BuildingRegister::class);
     }
 
+    public function locations()
+    {
+        return $this->hasMany(Location::class);
+    }
+
     // Accessors
     public function getTotalLandAssetsAttribute()
     {
@@ -66,6 +72,16 @@ class Region extends Model
     public function getTotalAssetValueAttribute()
     {
         return $this->total_land_value + $this->total_building_value;
+    }
+
+    public function getTotalLocationsAttribute()
+    {
+        return $this->locations()->count();
+    }
+
+    public function getActiveLocationsAttribute()
+    {
+        return $this->locations()->where('is_active', true)->count();
     }
 
     // Scopes
