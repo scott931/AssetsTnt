@@ -24,11 +24,16 @@ class BuildingRegisterExport implements FromCollection, WithHeadings, WithMappin
         $query = BuildingRegister::with('region');
 
         // Apply filters
+        if (!empty($this->filters['search'])) {
+            $search = $this->filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('description_name_of_building', 'like', "%{$search}%")
+                  ->orWhere('county', 'like', "%{$search}%")
+                  ->orWhere('nearest_town_shopping_centre', 'like', "%{$search}%");
+            });
+        }
         if (!empty($this->filters['category'])) {
             $query->where('category', $this->filters['category']);
-        }
-        if (!empty($this->filters['county'])) {
-            $query->where('county', 'like', '%' . $this->filters['county'] . '%');
         }
         if (!empty($this->filters['type_of_building'])) {
             $query->where('type_of_building', $this->filters['type_of_building']);

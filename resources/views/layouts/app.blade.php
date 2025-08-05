@@ -174,9 +174,8 @@
 
             <!-- Main Content -->
             <div class="ml-64 min-h-screen">
-                <!-- Top Navigation -->
-                <div class="bg-white shadow-sm border-b">
-                    <!-- <div class="flex items-center justify-between px-6 py-4"> -->
+                <!-- Top Navigation - Fixed -->
+                <div class="fixed top-0 right-0 left-64 z-40 bg-white shadow-sm border-b">
                     <div class="flex items-center justify-between px-6 py-4 w-full">
                         <div class="flex items-center">
                             <h2 class="text-xl font-semibold text-gray-800">
@@ -367,7 +366,7 @@
                 </div>
 
                 <!-- Page Content -->
-                <main class="p-6">
+                <main class="p-6 pt-20">
                     @isset($slot)
                         {{ $slot }}
                     @else

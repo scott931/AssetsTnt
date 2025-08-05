@@ -10,7 +10,12 @@
         <div class="flex flex-row justify-end gap-2 mb-2">
             <form id="asset-register-filter" method="GET" class="flex flex-row gap-2 items-center">
                 <a href="{{ route('reports.asset-register.export', request()->all()) }}"
-                    class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition">Export CSV</a>
+                    class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Export to Excel
+                </a>
                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-32 h-10">Filter</button>
             </form>
         </div>

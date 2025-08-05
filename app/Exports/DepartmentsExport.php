@@ -24,6 +24,14 @@ class DepartmentsExport implements FromCollection, WithHeadings, WithMapping, Sh
         $query = Department::with(['location']);
 
         // Apply filters
+        if (!empty($this->filters['search'])) {
+            $search = $this->filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
         if (!empty($this->filters['status'])) {
             $query->where('status', $this->filters['status']);
         }

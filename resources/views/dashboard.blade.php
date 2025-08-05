@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a href="{{ route('asset-transfers.index') }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">View Transfers →</a>
+                            <a href="{{ route('transfers.index') }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">View Transfers →</a>
                         </div>
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a href="{{ route('asset-maintenance.index') }}" class="text-yellow-600 hover:text-yellow-900 text-sm font-medium">View Maintenance →</a>
+                            <a href="{{ route('maintenance.index') }}" class="text-yellow-600 hover:text-yellow-900 text-sm font-medium">View Maintenance →</a>
                         </div>
                     </div>
                 </div>

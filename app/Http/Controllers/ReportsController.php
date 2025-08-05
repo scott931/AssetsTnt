@@ -83,7 +83,11 @@ class ReportsController extends Controller
 
     public function exportAssetRegister(Request $request)
     {
-        $filters = $request->only(['category_id', 'department_id', 'location_id', 'status', 'condition', 'supplier_id']);
+        $filters = $request->only([
+            'search', 'category_id', 'department_id', 'location_id', 'status',
+            'condition', 'supplier_id', 'assigned_to', 'warranty_expiry_from',
+            'warranty_expiry_to', 'purchase_date_from', 'purchase_date_to'
+        ]);
         $filename = 'assets_register_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         return Excel::download(new AssetsExport($filters), $filename);
@@ -115,7 +119,7 @@ class ReportsController extends Controller
 
     public function exportLandRegister(Request $request)
     {
-        $filters = $request->only(['category', 'county', 'mode_of_acquisition']);
+        $filters = $request->only(['search', 'category', 'mode_of_acquisition']);
         $filename = 'land_register_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         return Excel::download(new LandRegisterExport($filters), $filename);
@@ -154,7 +158,7 @@ class ReportsController extends Controller
 
     public function exportBuildingRegister(Request $request)
     {
-        $filters = $request->only(['category', 'county', 'type_of_building', 'designated_use', 'region_id']);
+        $filters = $request->only(['search', 'category', 'type_of_building', 'designated_use', 'region_id']);
         $filename = 'building_register_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         return Excel::download(new BuildingRegisterExport($filters), $filename);
@@ -187,7 +191,7 @@ class ReportsController extends Controller
 
     public function exportDepartments(Request $request)
     {
-        $filters = $request->only(['status', 'location_id']);
+        $filters = $request->only(['search', 'status', 'location_id']);
         $filename = 'departments_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         return Excel::download(new DepartmentsExport($filters), $filename);
@@ -224,7 +228,7 @@ class ReportsController extends Controller
 
     public function exportUsers(Request $request)
     {
-        $filters = $request->only(['status', 'department_id', 'location_id']);
+        $filters = $request->only(['search', 'status', 'department_id', 'location_id']);
         $filename = 'users_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         return Excel::download(new UsersExport($filters), $filename);

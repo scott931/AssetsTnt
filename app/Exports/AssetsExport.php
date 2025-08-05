@@ -24,6 +24,15 @@ class AssetsExport implements FromCollection, WithHeadings, WithMapping, ShouldA
         $query = Asset::with(['category', 'department', 'location', 'supplier', 'assignedUser']);
 
         // Apply filters
+        if (!empty($this->filters['search'])) {
+            $search = $this->filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('asset_tag', 'like', "%{$search}%")
+                  ->orWhere('serial_number', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
         if (!empty($this->filters['category_id'])) {
             $query->where('category_id', $this->filters['category_id']);
         }
@@ -41,6 +50,21 @@ class AssetsExport implements FromCollection, WithHeadings, WithMapping, ShouldA
         }
         if (!empty($this->filters['supplier_id'])) {
             $query->where('supplier_id', $this->filters['supplier_id']);
+        }
+        if (!empty($this->filters['assigned_to'])) {
+            $query->where('assigned_to', $this->filters['assigned_to']);
+        }
+        if (!empty($this->filters['warranty_expiry_from'])) {
+            $query->whereDate('warranty_expiry', '>=', $this->filters['warranty_expiry_from']);
+        }
+        if (!empty($this->filters['warranty_expiry_to'])) {
+            $query->whereDate('warranty_expiry', '<=', $this->filters['warranty_expiry_to']);
+        }
+        if (!empty($this->filters['purchase_date_from'])) {
+            $query->whereDate('purchase_date', '>=', $this->filters['purchase_date_from']);
+        }
+        if (!empty($this->filters['purchase_date_to'])) {
+            $query->whereDate('purchase_date', '<=', $this->filters['purchase_date_to']);
         }
 
         return $query->get();

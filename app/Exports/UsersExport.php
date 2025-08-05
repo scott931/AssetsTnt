@@ -24,6 +24,14 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
         $query = User::with(['department', 'location', 'roles']);
 
         // Apply filters
+        if (!empty($this->filters['search'])) {
+            $search = $this->filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
         if (!empty($this->filters['status'])) {
             $query->where('status', $this->filters['status']);
         }

@@ -24,11 +24,16 @@ class LandRegisterExport implements FromCollection, WithHeadings, WithMapping, S
         $query = LandRegister::query();
 
         // Apply filters
+        if (!empty($this->filters['search'])) {
+            $search = $this->filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('description_of_land', 'like', "%{$search}%")
+                  ->orWhere('county', 'like', "%{$search}%")
+                  ->orWhere('nearest_town_location', 'like', "%{$search}%");
+            });
+        }
         if (!empty($this->filters['category'])) {
             $query->where('category', $this->filters['category']);
-        }
-        if (!empty($this->filters['county'])) {
-            $query->where('county', 'like', '%' . $this->filters['county'] . '%');
         }
         if (!empty($this->filters['mode_of_acquisition'])) {
             $query->where('mode_of_acquisition', $this->filters['mode_of_acquisition']);
