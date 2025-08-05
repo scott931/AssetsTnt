@@ -6,7 +6,16 @@ use App\Models\Asset;
 use App\Models\AssetCategory;
 use App\Models\Department;
 use App\Models\Location;
+use App\Models\LandRegister;
+use App\Models\BuildingRegister;
+use App\Models\User;
+use App\Exports\AssetsExport;
+use App\Exports\LandRegisterExport;
+use App\Exports\BuildingRegisterExport;
+use App\Exports\DepartmentsExport;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
 {
@@ -73,6 +82,156 @@ class ReportsController extends Controller
     }
 
     public function exportAssetRegister(Request $request)
+    {
+        $filters = $request->only(['category_id', 'department_id', 'location_id', 'status', 'condition', 'supplier_id']);
+        $filename = 'assets_register_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return Excel::download(new AssetsExport($filters), $filename);
+    }
+
+    public function landRegister(Request $request)
+    {
+        $query = LandRegister::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('description_of_land', 'like', "%{$search}%")
+                  ->orWhere('county', 'like', "%{$search}%")
+                  ->orWhere('nearest_town_location', 'like', "%{$search}%");
+            });
+        }
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+        if ($request->filled('mode_of_acquisition')) {
+            $query->where('mode_of_acquisition', $request->mode_of_acquisition);
+        }
+
+        $landRegisters = $query->latest()->paginate(20)->appends($request->query());
+
+        return view('reports.land-register', compact('landRegisters'));
+    }
+
+    public function exportLandRegister(Request $request)
+    {
+        $filters = $request->only(['category', 'county', 'mode_of_acquisition']);
+        $filename = 'land_register_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return Excel::download(new LandRegisterExport($filters), $filename);
+    }
+
+    public function buildingRegister(Request $request)
+    {
+        $query = BuildingRegister::with('region');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('description_name_of_building', 'like', "%{$search}%")
+                  ->orWhere('county', 'like', "%{$search}%")
+                  ->orWhere('nearest_town_shopping_centre', 'like', "%{$search}%");
+            });
+        }
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+        if ($request->filled('type_of_building')) {
+            $query->where('type_of_building', $request->type_of_building);
+        }
+        if ($request->filled('designated_use')) {
+            $query->where('designated_use', $request->designated_use);
+        }
+        if ($request->filled('region_id')) {
+            $query->where('region_id', $request->region_id);
+        }
+
+        $buildingRegisters = $query->latest()->paginate(20)->appends($request->query());
+        $regions = \App\Models\Region::all();
+
+        return view('reports.building-register', compact('buildingRegisters', 'regions'));
+    }
+
+    public function exportBuildingRegister(Request $request)
+    {
+        $filters = $request->only(['category', 'county', 'type_of_building', 'designated_use', 'region_id']);
+        $filename = 'building_register_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return Excel::download(new BuildingRegisterExport($filters), $filename);
+    }
+
+    public function departments(Request $request)
+    {
+        $query = Department::with('location');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('location_id')) {
+            $query->where('location_id', $request->location_id);
+        }
+
+        $departments = $query->latest()->paginate(20)->appends($request->query());
+        $locations = \App\Models\Location::all();
+
+        return view('reports.departments', compact('departments', 'locations'));
+    }
+
+    public function exportDepartments(Request $request)
+    {
+        $filters = $request->only(['status', 'location_id']);
+        $filename = 'departments_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return Excel::download(new DepartmentsExport($filters), $filename);
+    }
+
+    public function users(Request $request)
+    {
+        $query = User::with(['department', 'location', 'roles']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('department_id')) {
+            $query->where('department_id', $request->department_id);
+        }
+        if ($request->filled('location_id')) {
+            $query->where('location_id', $request->location_id);
+        }
+
+        $users = $query->latest()->paginate(20)->appends($request->query());
+        $departments = \App\Models\Department::all();
+        $locations = \App\Models\Location::all();
+
+        return view('reports.users', compact('users', 'departments', 'locations'));
+    }
+
+    public function exportUsers(Request $request)
+    {
+        $filters = $request->only(['status', 'department_id', 'location_id']);
+        $filename = 'users_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return Excel::download(new UsersExport($filters), $filename);
+    }
+
+    // Legacy CSV export method (keeping for backward compatibility)
+    public function exportAssetRegisterCsv(Request $request)
     {
         $query = Asset::with(['category', 'department', 'location', 'supplier', 'assignedUser']);
         if ($request->filled('category_id')) {

@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // Seed locations
+        // Seed regions first, then locations
         $this->call([
+            RegionSeeder::class,
             LocationSeeder::class,
         ]);
     }

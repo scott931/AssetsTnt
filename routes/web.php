@@ -16,10 +16,42 @@ use App\Http\Controllers\BuildingRegisterController;
 use App\Http\Controllers\RegionController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Models\LandRegister;
+use App\Models\BuildingRegister;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
+
+// Debug route to check register data
+Route::get('/debug/registers', function () {
+    $landCount = LandRegister::count();
+    $buildingCount = BuildingRegister::count();
+    $latestLand = LandRegister::latest()->first();
+    $latestBuilding = BuildingRegister::latest()->first();
+
+    return response()->json([
+        'land_count' => $landCount,
+        'building_count' => $buildingCount,
+        'latest_land' => $latestLand ? [
+            'id' => $latestLand->id,
+            'description' => $latestLand->description_of_land,
+            'county' => $latestLand->county,
+            'created_at' => $latestLand->created_at
+        ] : null,
+        'latest_building' => $latestBuilding ? [
+            'id' => $latestBuilding->id,
+            'description' => $latestBuilding->description_name_of_building,
+            'county' => $latestBuilding->county,
+            'created_at' => $latestBuilding->created_at
+        ] : null
+    ]);
+});
+
+// Test sidebar route
+Route::get('/test-sidebar', function () {
+    return view('test-sidebar');
+})->name('test-sidebar');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard
@@ -63,6 +95,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
     Route::get('/reports/asset-register', [ReportsController::class, 'assetRegister'])->name('reports.asset-register');
     Route::get('/reports/asset-register/export', [ReportsController::class, 'exportAssetRegister'])->name('reports.asset-register.export');
+    Route::get('/reports/land-register', [ReportsController::class, 'landRegister'])->name('reports.land-register');
+    Route::get('/reports/land-register/export', [ReportsController::class, 'exportLandRegister'])->name('reports.land-register.export');
+    Route::get('/reports/building-register', [ReportsController::class, 'buildingRegister'])->name('reports.building-register');
+    Route::get('/reports/building-register/export', [ReportsController::class, 'exportBuildingRegister'])->name('reports.building-register.export');
+    Route::get('/reports/departments', [ReportsController::class, 'departments'])->name('reports.departments');
+    Route::get('/reports/departments/export', [ReportsController::class, 'exportDepartments'])->name('reports.departments.export');
+    Route::get('/reports/users', [ReportsController::class, 'users'])->name('reports.users');
+    Route::get('/reports/users/export', [ReportsController::class, 'exportUsers'])->name('reports.users.export');
 
     // Audit Logs (placeholder routes)
     Route::get('/audit-logs', function () {
