@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@media (min-width: 768px) {
+  .footer-block {
+    flex: 1 0 0;
+    border-right: 3px solid transparent;
+    position: relative;
+  }
+
+  .footer-block:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -1.5px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: repeating-linear-gradient(
+      to bottom,
+      #000000 0% 20%,
+      #ffffff 20% 25%,
+      #bd0034 25% 60%,
+      #ffffff 60% 65%,
+      #006400 65% 100%
+    );
+  }
+
+  .footer-block:last-child {
+    border-right: none;
+  }
+}

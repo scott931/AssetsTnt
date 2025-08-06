@@ -18,10 +18,15 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\LandRegister;
 use App\Models\BuildingRegister;
+use Illuminate\Support\Facades\Auth;
+
+
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
+    return Auth::check()
+        ? redirect()->route('dashboard')
+        : view('welcome');
+})->name('welcome');
 
 // Debug route to check register data
 Route::get('/debug/registers', function () {
