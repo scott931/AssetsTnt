@@ -50,7 +50,7 @@
 <body class="bg-gradient-to-br from-yellow-300 via-yellow-600 to-yellow-900 min-h-screen flex flex-col text-white">
 
     <!-- Navbar -->
-    <div class="flex items-center justify-between px-6 py-4 bg-[#7c4404]">
+<div class="flex items-center justify-between px-6 py-4 bg-[#7c4404]">
     <!-- Logo on the left -->
     <div class="bg-white rounded-lg p-3 shadow-lg inline-block">
         <img src="{{ asset('images/logo2.png') }}" alt="Kenyan Flag" class="h-16 w-auto">
@@ -59,6 +59,10 @@
     <!-- Text on the right -->
     <span class="font-bold text-white text-lg">ASSETS</span>
 </div>
+
+<!-- Top Green Line After Navbar -->
+<div style="height: 7px; background-color: #161716ff;"></div>
+
 
         <button class="md:hidden text-white focus:outline-none" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
             &#9776;
