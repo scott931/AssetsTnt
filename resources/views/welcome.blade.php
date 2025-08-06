@@ -89,10 +89,9 @@
     <footer class="py-6 px-6" style="background-color: #7c4404; color: #eef1f1;">
         <div class="max-w-6xl mx-auto">
             <div class="flex flex-col md:flex-row gap-8 md:gap-4 justify-between text-left text-sm">
-
                 <!-- Block 1 -->
                 <div class="footer-block">
-                    <h5 class="text-lg font-semibold mb-2">TNTRMS</h5>
+                    <h5 class="text-lg font-semibold mb-2">Assets Management</h5>
                     <p>
                         A system ensuring Searchability, Organization, Traceability, Retrieval, Maintenance, and
                         Accountability of National Treasury documents and mail.
