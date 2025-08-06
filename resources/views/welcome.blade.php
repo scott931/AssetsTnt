@@ -94,7 +94,7 @@
                     <h5 class="text-lg font-semibold mb-2">Assets Management</h5>
                     <p>
                         A system ensuring Searchability, Organization, Traceability, Retrieval, Maintenance, and
-                        Accountability of National Treasury documents and mail.
+                        Accountability of National Treasury assets.
                     </p>
                 </div>
 
